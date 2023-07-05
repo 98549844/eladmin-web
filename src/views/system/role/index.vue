@@ -11,7 +11,7 @@
       <crudOperation :permission="permission" />
     </div>
     <!-- 表单渲染 -->
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="520px">
+    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible="crud.status.cu" :title="crud.status.title" width="520px">
       <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="80px">
         <el-form-item label="角色名称" prop="name">
           <el-input v-model="form.name" style="width: 380px;" />
@@ -34,6 +34,9 @@
             v-model="deptDatas"
             :load-options="loadDepts"
             :options="depts"
+            :flat="true"
+            :auto-select-descendants="true"
+            :default-expand-level="1"
             multiple
             style="width: 380px"
             placeholder="请选择"
@@ -192,6 +195,7 @@ export default {
     },
     // 提交前做的操作
     [CRUD.HOOK.afterValidateCU](crud) {
+      console.log(this.deptDatas)
       if (crud.form.dataScope === '自定义' && this.deptDatas.length === 0) {
         this.$message({
           message: '自定义数据权限不能为空',
